@@ -1,4 +1,4 @@
-var PANDORA_URL = "http://www.pandora.com/station/play/";
+var PANDORA_URL = "http://www.pandora.com";
 var data = {};
 var loaded = false;
 

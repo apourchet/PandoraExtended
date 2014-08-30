@@ -1,10 +1,11 @@
-var PANDORA_URL = "http://www.pandora.com/station/play/";
+var PANDORA_URL = "http://www.pandora.com";
 var lastData = {};
 
 chrome.storage.local.clear(function() {
 });
 
 function getAllInfo(tabid) {
+			console.log("Running")
 	chrome.tabs.executeScript(tabid,
 		{file: "getAllInfo.js"},
 		function(results) {
