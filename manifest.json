@@ -1,16 +1,21 @@
 {
-  "name": "Pandora Extended",
-  "description": "See the details of the current song playing on Pandora",
-  "version": "0.1",
-  "permissions": [
-    "tabs", "http://*/*", "https://*/*", "storage"
-  ],
-  "background": { "scripts": ["background.js"] },
-  "browser_action": {
-      "name": "See the details of the current song playing on Pandora",
-      "default_title": "Check what's playing",
-      "default_icon": "icon128.png",
-      "default_popup": "popup.html"
-  },
-  "manifest_version": 2
+	"name": "Pandora Extended",
+	"description": "See the details of the current song playing on Pandora",
+	"version": "0.1",
+	"permissions": [
+		"tabs", "http://*/*", "https://*/*", "storage"
+	],
+	"background": { "scripts": ["background.js"] },
+	"browser_action": {
+		"name": "See the details of the current song playing on Pandora",
+		"default_title": "Check what's playing",
+		"default_icon": "icon128.png",
+		"default_popup": "popup.html"
+	},
+	"icons": { 
+		"16": "icon16.png",
+		"48": "icon48.png",
+		"128": "icon128.png" 
+	},
+	"manifest_version": 2
 }
