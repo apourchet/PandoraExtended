@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Pandora Extended</title>
+    <style>
+    body {
+      overflow: hidden;
+      margin: 0px;
+      padding: 0px;
+      background: url("http://t1.gstatic.com/images?q=tbn:ANd9GcSEJWdJ8xjD_1vf17pkYTR0LVCIGbf4HUdyuM-VuNGA2y-y43baIg");
+      width: 230px;
+    }
+
+    div:first-child {
+      margin-top: 4px;
+    }
+
+    div {
+      margin: auto;
+      cursor: pointer;
+      text-align: center;
+      padding: 1px 3px;
+      font-family: comic sans ms;
+      font-size: 0.8em;
+      width: 200px;
+      margin-top: 1px;
+      background: url("http://cdn.shopify.com/s/files/1/0309/9869/products/Large-Blue-Background._grande.jpg?v=1387238678");
+    }
+
+    div:hover {
+      background: #aaaaaa;
+    }
+
+    #playpause {
+      margin-top: 10px;
+    }
+
+    img {
+      margin-left:90px;
+      margin-top:5px;
+    }
+    </style>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <div>Title: <span id="title">No Song Playing</span></div>
+    <div>Artist: <span id="artist">Unknown</div>
+    <div>Album: <span id="album">Unknown</div>
+    <div id="playpause">Play / Pause</div>
+    <div id="like">Like</div>
+    <div id="dislike">DisLike</div>
+    <div id="skip">Skip</div>
+    <img id="imgsrc" src="http://investorplace.com/wp-content/uploads/2014/01/Pandora-stock-p-stock.jpg" width='50' height='50' />
+  </body>
+</html>
