@@ -7,9 +7,9 @@
   ],
   "background": { "scripts": ["background.js"] },
   "browser_action": {
-      "name": "Click to change the icon's color",
-      "default_title": "Set this page's color.",
-      "default_icon": "icon.png",
+      "name": "See the details of the current song playing on Pandora",
+      "default_title": "Check what's playing",
+      "default_icon": "icon128.png",
       "default_popup": "popup.html"
   },
   "manifest_version": 2

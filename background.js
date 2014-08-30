@@ -1,4 +1,5 @@
 var PANDORA_URL = "http://www.pandora.com/station/play/";
+var lastData = {};
 
 chrome.storage.local.clear(function() {
 });
@@ -14,11 +15,17 @@ function getAllInfo(tabid) {
 				album: allInfo[2],
 				imgsrc: allInfo[3]
 			};
-			chrome.runtime.sendMessage({data: data}, function(response) {
-
-			});
+			lastData = data;
 		}
 	);
+}
+
+function sendLastData() {
+	if (Object.keys(lastData).length === 0) {
+		return;
+	}
+	chrome.runtime.sendMessage({data: lastData}, function(response) {
+	});
 }
 
 function loop() {
@@ -35,4 +42,5 @@ function loop() {
 	});
 }
 
-setInterval(loop, 1000);
+setInterval(loop, 200);
+setInterval(sendLastData, 50);
