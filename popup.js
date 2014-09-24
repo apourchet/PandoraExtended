@@ -1,6 +1,8 @@
 var PANDORA_URL = "http://www.pandora.com";
+var defaultImgSrc = "http://investorplace.com/wp-content/uploads/2014/01/Pandora-stock-p-stock.jpg"
 var data = {};
 var loaded = false;
+var lastMessage = 0;
 
 chrome.storage.local.clear(function() {});
 
@@ -101,13 +103,24 @@ document.addEventListener('DOMContentLoaded', function () {
 	updateDOM();
 
 	chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+		if (lastMessage > req.timeStamp) {
+			return;
+		}
 		console.log("Got a message!");
-		
-		data = req.data;
-
+				
+		lastMessage = req.timeStamp;
+		if (req.error === 1) {
+			data.title = "No Song Playing"
+			data.artist = ""
+			data.album = ""
+			data.imgsrc = defaultImgSrc
+		} else {	
+			data = req.data;
+		}
+				
 		updateDOM();
 		saveToLocal();
 
-	  	sendResponse({farewell: "goodbye"});
+	 	sendResponse({ok: 1});
 	});
 });

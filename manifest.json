@@ -1,7 +1,7 @@
 {
 	"name": "Pandora Extended",
 	"description": "See the details of the current song playing on Pandora",
-	"version": "0.2",
+	"version": "0.3",
 	"permissions": [
 		"tabs", "http://*/*", "https://*/*", "storage"
 	],

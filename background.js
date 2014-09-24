@@ -25,7 +25,12 @@ function sendLastData() {
 	if (Object.keys(lastData).length === 0) {
 		return;
 	}
-	chrome.runtime.sendMessage({data: lastData}, function(response) {
+	chrome.runtime.sendMessage({data: lastData, timeStamp: new Date().getTime()}, function(response) {
+	});
+}
+
+function sendNoTab() {
+	chrome.runtime.sendMessage({data: {}, error: 1, timeStamp: new Date().getTime()}, function(response) {
 	});
 }
 
@@ -39,7 +44,10 @@ function loop() {
 			}
 			var id = tab.id;
 			getAllInfo(id);
+			return;
 		}
+		lastData = {};
+		sendNoTab();
 	});
 }
 
