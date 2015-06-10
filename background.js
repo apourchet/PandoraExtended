@@ -1,55 +1,46 @@
-var PANDORA_URL = "http://www.pandora.com";
-var lastData = {};
+var PANDORA_URL = "http://www.pandora.com"
+var NOOP = function(){}
 
-chrome.storage.local.clear(function() {
-});
+var lastData = {}
+
+chrome.storage.local.clear(NOOP)
 
 function getAllInfo(tabid) {
-			console.log("Running")
-	chrome.tabs.executeScript(tabid,
-		{file: "getAllInfo.js"},
+  console.log("Running")
+	chrome.tabs.executeScript(tabid, {file: "getAllInfo.js"},
 		function(results) {
-			var allInfo = results[0].split(";");
-			var data = {
-				title: allInfo[0],
-				artist: allInfo[1],
-				album: allInfo[2],
-				imgsrc: allInfo[3]
-			};
-			lastData = data;
+			lastData = results[0]
 		}
-	);
+	)
 }
 
 function sendLastData() {
-	if (Object.keys(lastData).length === 0) {
-		return;
-	}
-	chrome.runtime.sendMessage({data: lastData, timeStamp: new Date().getTime()}, function(response) {
-	});
+	if (Object.keys(lastData).length !== 0) {
+    chrome.runtime.sendMessage({data: lastData, timeStamp: new Date().getTime()}, NOOP)
+  }
 }
 
 function sendNoTab() {
-	chrome.runtime.sendMessage({data: {}, error: 1, timeStamp: new Date().getTime()}, function(response) {
-	});
+	chrome.runtime.sendMessage({data: {}, error: 1, timeStamp: new Date().getTime()}, NOOP)
 }
 
 function loop() {
 	chrome.tabs.getAllInWindow(null, function(tabs) {
-		for (var i in tabs) {
-			var tab = tabs[i];
-			var url = tab.url;
-			if (url.indexOf(PANDORA_URL) != 0) {
-				continue; 
+    tabid = -1
+    tabs.forEach(function(tab) {
+			if (tab.url.indexOf(PANDORA_URL) == 0) {
+        tabid = tab.id
 			}
-			var id = tab.id;
-			getAllInfo(id);
-			return;
-		}
-		lastData = {};
-		sendNoTab();
-	});
+    })
+
+    if (tabid == -1) {
+      lastData = {}
+      sendNoTab()
+    } else {
+      getAllInfo(tabid)
+    }
+	})
 }
 
-setInterval(loop, 200);
-setInterval(sendLastData, 50);
+setInterval(loop, 200)
+setInterval(sendLastData, 50)

@@ -1,126 +1,97 @@
-var PANDORA_URL = "http://www.pandora.com";
-var defaultImgSrc = "http://investorplace.com/wp-content/uploads/2014/01/Pandora-stock-p-stock.jpg"
-var data = {};
-var loaded = false;
-var lastMessage = 0;
+var PANDORA_URL = "http://www.pandora.com"
+var NOOP = function(){}
+var DEFAULT_IMG_SRC = "http://investorplace.com/wp-content/uploads/2014/01/Pandora-stock-p-stock.jpg"
 
-chrome.storage.local.clear(function() {});
+var data = {}
+var loaded = false
+var lastMessage = 0
+
+chrome.storage.local.clear(NOOP)
+
+function getPandoraTab(cb) {
+	chrome.tabs.getAllInWindow(null, function(tabs) {
+    tabs.forEach(function(tab) {
+      if (tab.url.indexOf(PANDORA_URL) === 0) {
+        cb(tab)
+      }
+    })
+  })
+}
 
 function playpause() {
-	chrome.tabs.getAllInWindow(null, function(tabs) {
-		for (var i in tabs) {
-			var tab = tabs[i];
-			var url = tab.url;
-			if (url.indexOf(PANDORA_URL) != 0) {
-				continue; 
-			}
-			var id = tab.id;
-			chrome.tabs.executeScript(id,
-				{file:"playpause.js"}
-			);
-		}
-	});
+  getPandoraTab(function(tab) {
+    chrome.tabs.executeScript(tab.id, {file: "playpause.js"})
+  })
 }
 
 function like() {
-	chrome.tabs.getAllInWindow(null, function(tabs) {
-		for (var i in tabs) {
-			var tab = tabs[i];
-			var url = tab.url;
-			if (url.indexOf(PANDORA_URL) != 0) {
-				continue; 
-			}
-			var id = tab.id;
-			chrome.tabs.executeScript(id,
-				{code: "document.getElementsByClassName(\"thumbUpButton\")[0].click()"}
-			);
-		}
-	});
+  getPandoraTab(function(tab) {
+			chrome.tabs.executeScript(tab.id, {code: "document.getElementsByClassName(\"thumbUpButton\")[0].click()"})
+  })
 }
 
 function dislike() {
-	chrome.tabs.getAllInWindow(null, function(tabs) {
-		for (var i in tabs) {
-			var tab = tabs[i];
-			var url = tab.url;
-			if (url.indexOf(PANDORA_URL) != 0) {
-				continue; 
-			}
-			var id = tab.id;
-			chrome.tabs.executeScript(id,
-				{code: "document.getElementsByClassName(\"thumbDownButton\")[0].click()"}
-			);
-		}
-	});
+  getPandoraTab(function(tab) {
+			chrome.tabs.executeScript(tab.id, {code: "document.getElementsByClassName(\"thumbDownButton\")[0].click()"})
+  })
 }
 
 function skip() {
-	chrome.tabs.getAllInWindow(null, function(tabs) {
-		for (var i in tabs) {
-			var tab = tabs[i];
-			var url = tab.url;
-			if (url.indexOf(PANDORA_URL) != 0) {
-				continue; 
-			}
-			var id = tab.id;
-			chrome.tabs.executeScript(id,
-				{code: "document.getElementsByClassName(\"skipButton\")[0].click()"}
-			);
-		}
-	});
+  getPandoraTab(function(tab) {
+			chrome.tabs.executeScript(tab.id, {code: "document.getElementsByClassName(\"skipButton\")[0].click()"})
+  })
 }
 
 function updateDOM() {
-	document.getElementById("playpause").onclick = playpause;
-	document.getElementById("like").onclick = like;
-	document.getElementById("dislike").onclick = dislike;
-	document.getElementById("skip").onclick = skip;
+	document.getElementById("playpause").onclick = playpause
+	document.getElementById("like").onclick = like
+	document.getElementById("dislike").onclick = dislike
+	document.getElementById("skip").onclick = skip
 
 	if (Object.keys(data).length === 0)
-		return;
+		return
 
-	document.getElementById("title").innerHTML = data.title;
-	document.getElementById("artist").innerHTML = data.artist;
-	document.getElementById("album").innerHTML = data.album;
-
-	document.getElementById("imgsrc").src = data.imgsrc;
+	document.getElementById("title").innerHTML = data.title
+	document.getElementById("artist").innerHTML = data.artist
+	document.getElementById("album").innerHTML = data.album
+	document.getElementById("imgsrc").src = data.imgsrc
 }
 
 function saveToLocal() {
-	chrome.storage.local.set({data: data}, function() {})
+	chrome.storage.local.set({data: data}, NOOP)
 }
 
 chrome.storage.local.get("data", function(o) {
-	data = o;
+	data = o
 	if (loaded) {
-		updateDOM();
+		updateDOM()
 	}
-});
+})
 
 document.addEventListener('DOMContentLoaded', function () {
-	console.log("Popup.js called!");
-	loaded = true;
-	updateDOM();
+	console.log("Popup.js called!")
+	loaded = true
+	updateDOM()
 
 	chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
 		if (lastMessage > req.timeStamp) {
-			return;
+			return
 		}
-		console.log("Got a message!");
+		console.log("Got a message!")
 				
-		lastMessage = req.timeStamp;
+		lastMessage = req.timeStamp
 		if (req.error === 1) {
 			data.title = "No Song Playing"
 			data.artist = ""
 			data.album = ""
-			data.imgsrc = defaultImgSrc
+			data.imgsrc = DEFAULT_IMG_SRC
 		} else {	
-			data = req.data;
+			data = req.data
 		}
 				
-		updateDOM();
-		saveToLocal();
+		updateDOM()
+		saveToLocal()
 
-	 	sendResponse({ok: 1});
-	});
-});
+	 	sendResponse({ok: 1})
+	})
+})
