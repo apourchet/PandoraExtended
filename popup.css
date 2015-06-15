@@ -26,6 +26,10 @@ div:hover {
   background: #aaaaaa;
 }
 
+div.toggled {
+  background: orange;
+}
+
 #playpause {
   margin-top: 10px;
 }

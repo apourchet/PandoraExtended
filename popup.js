@@ -42,6 +42,24 @@ function skip() {
   })
 }
 
+function removeClassName(el, className) {
+  classes = el.className.split(" ")
+  newClasses = ""
+  for (var i in classes) {
+    if (classes[i] !== className) {
+      newClasses += classes[i] + " "
+    }
+  }
+  el.className = newClasses
+}
+
+function addClassName(el, className) {
+  if (el.className.indexOf(className) != -1) {
+    return
+  }
+  el.className += " " + className
+}
+
 function updateDOM() {
 	document.getElementById("playpause").onclick = playpause
 	document.getElementById("like").onclick = like
@@ -55,6 +73,8 @@ function updateDOM() {
 	document.getElementById("artist").innerHTML = data.artist
 	document.getElementById("album").innerHTML = data.album
 	document.getElementById("imgsrc").src = data.imgsrc
+  data.liked ? addClassName(document.getElementById("like"), "toggled") : removeClassName(document.getElementById("like"), "toggled")
+  data.disliked ? addClassName(document.getElementById("dislike"), "toggled") : removeClassName(document.getElementById("dislike"), "toggled")
 }
 
 function saveToLocal() {
